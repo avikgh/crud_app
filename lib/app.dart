@@ -1,4 +1,5 @@
 import 'package:crud_app/ui/screens/product_list_screen.dart';
+import 'package:crud_app/ui/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 class CrudApp extends StatelessWidget {
@@ -8,8 +9,9 @@ class CrudApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Crud App',
+      debugShowCheckedModeBanner: false,
       theme: _buildLightTheme(),
-      home: ProductListScreen(),
+      home: SplashScreen(),
     );
   }
 

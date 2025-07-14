@@ -1,14 +1,20 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
-class AddProductScreen extends StatefulWidget {
-  const AddProductScreen({super.key});
+import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+
+import '../../entities/product_details.dart';
+
+class UpdateProductScreen extends StatefulWidget {
+  const UpdateProductScreen({super.key, required this.products});
+
+  final ProductDetails products;
 
   @override
-  State<AddProductScreen> createState() => _AddProductScreenState();
+  State<UpdateProductScreen> createState() => _UpdateProductScreenState();
 }
 
-class _AddProductScreenState extends State<AddProductScreen> {
-
+class _UpdateProductScreenState extends State<UpdateProductScreen> {
   final TextEditingController _nameTEController = TextEditingController();
   final TextEditingController _codeTEController = TextEditingController();
   final TextEditingController _unitPriceTEController = TextEditingController();
@@ -24,10 +30,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
       appBar: AppBar(
         title: Text('Update Product'),
         titleTextStyle: TextStyle(
-            color: Colors.white,
-            fontSize: 25,
-            fontWeight: FontWeight.bold
-        ),
+            color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),
         titleSpacing: 0,
       ),
       body: SingleChildScrollView(
@@ -40,49 +43,37 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 children: [
                   TextFormField(
                     controller: _nameTEController,
-                    decoration: InputDecoration(
-                        label: Text('Product Name')
-                    ),
+                    decoration: InputDecoration(label: Text('Product Name')),
                     validator: validate,
                   ),
                   SizedBox(height: 15),
                   TextFormField(
                     controller: _codeTEController,
-                    decoration: InputDecoration(
-                        label: Text('Product Code')
-                    ),
+                    decoration: InputDecoration(label: Text('Product Code')),
                     validator: validate,
                   ),
                   SizedBox(height: 15),
                   TextFormField(
                     controller: _unitPriceTEController,
-                    decoration: InputDecoration(
-                        label: Text('Unit Price')
-                    ),
+                    decoration: InputDecoration(label: Text('Unit Price')),
                     validator: validate,
                   ),
                   SizedBox(height: 15),
                   TextFormField(
                     controller: _totalPriceTEController,
-                    decoration: InputDecoration(
-                        label: Text('Total Price')
-                    ),
+                    decoration: InputDecoration(label: Text('Total Price')),
                     validator: validate,
                   ),
                   SizedBox(height: 15),
                   TextFormField(
                     controller: _quantityTEController,
-                    decoration: InputDecoration(
-                        label: Text('Quantity')
-                    ),
+                    decoration: InputDecoration(label: Text('Quantity')),
                     validator: validate,
                   ),
                   SizedBox(height: 15),
                   TextFormField(
                     controller: _imageTEController,
-                    decoration: InputDecoration(
-                        label: Text('Image')
-                    ),
+                    decoration: InputDecoration(label: Text('Image')),
                     validator: validate,
                   ),
                   SizedBox(height: 15),
@@ -91,14 +82,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     width: double.maxFinite,
                     child: ElevatedButton(
                       onPressed: () {
-                        if(_formKey.currentState!.validate()) {
-
+                        if (_formKey.currentState!.validate()) {
+                          _updateProduct();
                         }
                       },
-                      child: Text('Update Product', style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18
-                      ),),
+                      child: Text(
+                        'Update Product',
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
                     ),
                   )
                 ],
@@ -110,11 +101,53 @@ class _AddProductScreenState extends State<AddProductScreen> {
     );
   }
 
+  Future<void> _updateProduct() async {
+    String url =
+        'https://crud.teamrabbil.com/api/v1/UpdateProduct/${widget.products.id}';
+    Uri uri = Uri.parse(url);
+    Map<String, String> productDetails = {
+      "ProductName": _nameTEController.text.trim() ?? '',
+      "ProductCode": _codeTEController.text.trim() ?? '',
+      "Img": _imageTEController.text.trim() ?? '',
+      "UnitPrice": _unitPriceTEController.text.trim() ?? '',
+      "Qty": _quantityTEController.text.trim() ?? '',
+      "TotalPrice": _totalPriceTEController.text.trim() ?? ''
+    };
+    final Response response = await post(uri,
+        body: jsonEncode(productDetails),
+        headers: {'content-type': 'application/json'});
+    if(response.statusCode == 200) {
+      _buildSnackBar('Product updated successfully.');
+      Navigator.pop(context, true);
+    } else {
+      _buildSnackBar('Failed to update product. Try again.');
+    }
+  }
+
+  void _buildSnackBar(String content) {
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(content),
+        )
+    );
+  }
+
   String? validate(String? value) {
-    if(value?.trim().isEmpty ?? true) {
+    if (value?.trim().isEmpty ?? true) {
       return 'Enter a valid value';
     }
     return null;
+  }
+
+  @override
+  void initState() {
+    _nameTEController.text = widget.products.productName;
+    _codeTEController.text = widget.products.productCode;
+    _unitPriceTEController.text = widget.products.unitPrice;
+    _totalPriceTEController.text = widget.products.totalPrice;
+    _quantityTEController.text = widget.products.quantity;
+    _imageTEController.text = widget.products.image;
+    super.initState();
   }
 
   @override

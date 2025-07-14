@@ -30,7 +30,10 @@ class _ProductListScreenState extends State<ProductListScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              productList.clear();
+              _getProduct();
+            },
             icon: Icon(
               Icons.refresh,
               size: 25,
@@ -69,6 +72,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
   }
 
   Future<void> _getProduct() async {
+    _circularProgressIndicator = false;
+    setState(() {});
     const String url = 'https://crud.teamrabbil.com/api/v1/ReadProduct';
     Uri uri = Uri.parse(url);
     final Response response = await get(uri);
