@@ -4,6 +4,7 @@ import 'package:crud_app/entities/product_details.dart';
 import 'package:crud_app/ui/screens/add_product_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:lottie/lottie.dart';
 
 import '../widgets/product_item.dart';
 
@@ -17,6 +18,7 @@ class ProductListScreen extends StatefulWidget {
 class _ProductListScreenState extends State<ProductListScreen> {
   List<ProductDetails> productList = [];
   bool _circularProgressIndicator = false;
+  bool _isEmptyLottie = false;
 
   @override
   Widget build(BuildContext context) {
@@ -45,14 +47,22 @@ class _ProductListScreenState extends State<ProductListScreen> {
       body: Visibility(
         visible: _circularProgressIndicator,
         replacement: _buildCircularProgressIndicator(),
-        child: ListView.builder(
-          itemCount: productList.length,
-          itemBuilder: (context, index) {
-            return ProductItem(
-              productDetails: productList[index],
-            );
-          },
-        ),
+        child: _isEmptyLottie
+            ? Center(
+              child: LottieBuilder.asset(
+                  'assets/lottie_files/empty.json',
+                  height: 200,
+                  width: 200,
+                ),
+            )
+            : ListView.builder(
+                itemCount: productList.length,
+                itemBuilder: (context, index) {
+                  return ProductItem(
+                    productDetails: productList[index],
+                  );
+                },
+              ),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
@@ -91,6 +101,9 @@ class _ProductListScreenState extends State<ProductListScreen> {
       }
     }
     _circularProgressIndicator = true;
+    if (productList.length == 0) {
+      _isEmptyLottie = true;
+    }
     setState(() {});
   }
 
