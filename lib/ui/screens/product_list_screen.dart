@@ -103,6 +103,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
     _circularProgressIndicator = true;
     if (productList.length == 0) {
       _isEmptyLottie = true;
+    } else {
+      _isEmptyLottie = false;
     }
     setState(() {});
   }
