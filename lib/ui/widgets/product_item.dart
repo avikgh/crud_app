@@ -1,7 +1,6 @@
 import 'package:crud_app/ui/screens/update_product_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-
 import '../../entities/product_details.dart';
 
 class ProductItem extends StatefulWidget {

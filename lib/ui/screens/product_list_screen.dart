@@ -49,11 +49,23 @@ class _ProductListScreenState extends State<ProductListScreen> {
         replacement: _buildCircularProgressIndicator(),
         child: _isEmptyLottie
             ? Center(
-              child: LottieBuilder.asset(
-                  'assets/lottie_files/empty.json',
-                  height: 200,
-                  width: 200,
-                ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  LottieBuilder.asset(
+                      'assets/lottie_files/empty.json',
+                      height: 200,
+                      width: 200,
+                  ),
+                  SizedBox(height: 10),
+                  Text('Empty List!', style: TextStyle(
+                    color: Color(0xFF8986C4),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: 4
+                  ),)
+                ],
+              ),
             )
             : ListView.builder(
                 itemCount: productList.length,
