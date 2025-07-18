@@ -157,6 +157,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(content),
+        backgroundColor: Color(0xFF8986C4),
       )
     );
   }
