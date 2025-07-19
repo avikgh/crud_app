@@ -128,6 +128,12 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(content),
+          backgroundColor: Color(0xFF8986C4),
+          margin: EdgeInsets.all(20),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10)
+          ),
         )
     );
   }

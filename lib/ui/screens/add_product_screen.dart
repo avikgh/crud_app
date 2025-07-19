@@ -158,6 +158,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
       SnackBar(
         content: Text(content),
         backgroundColor: Color(0xFF8986C4),
+        margin: EdgeInsets.all(20),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10)
+        ),
       )
     );
   }
