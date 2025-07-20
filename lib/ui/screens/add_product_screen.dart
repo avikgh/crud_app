@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:crud_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
@@ -131,11 +132,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
       _totalPriceTEController.clear();
       _imageTEController.clear();
       _circularProgressIndicator = true;
-      _buildSnackBar('Product added successfully.');
+      _buildSnackBar('Successful', 'Product added successfully.', true);
       setState(() {});
     } else {
       _circularProgressIndicator = true;
-      _buildSnackBar('Product added failed.');
+      _buildSnackBar('Failed', 'Product added failed.', false);
       setState(() {});
     }
   }
@@ -153,16 +154,42 @@ class _AddProductScreenState extends State<AddProductScreen> {
     );
   }
 
-  void _buildSnackBar(String content) {
+  void _buildSnackBar(String title, String content, bool type) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(content),
-        backgroundColor: Color(0xFF8986C4),
-        margin: EdgeInsets.all(20),
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
+        elevation: 0,
+        content: Container(
+          height: 60,
+          width: double.maxFinite,
+          decoration: BoxDecoration(
+            color: type ? Colors.green : Colors.red,
             borderRadius: BorderRadius.circular(10)
+          ),
+          child: Row(
+            children: [
+              SizedBox(width: 10),
+              Icon(type ? Icons.check_circle : Icons.close, size: 35, color: Colors.white,),
+              SizedBox(width: 10),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title, style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500
+                  ),),
+                  Text(content, style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
+                  ),),
+                ],
+              )
+            ],
+          ),
         ),
+        backgroundColor: Colors.white,
+        behavior: SnackBarBehavior.floating,
       )
     );
   }
