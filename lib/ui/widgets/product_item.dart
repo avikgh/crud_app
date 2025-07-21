@@ -1,4 +1,5 @@
 import 'package:crud_app/ui/screens/update_product_screen.dart';
+import 'package:crud_app/ui/widgets/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import '../../entities/product_details.dart';
@@ -106,21 +107,11 @@ class _ProductItemState extends State<ProductItem> {
     final Response response =
         await get(uri, headers: {'content-type': 'application/json'});
     if (response.statusCode == 200) {
-      _buildSnackBar('Product deleted successfully.');
+      CustomSnackBar.buildSnackBar(
+          'Successful', 'Product deleted successfully.', true, context);
     } else {
-      _buildSnackBar('failed to delete the product. Try again');
+      CustomSnackBar.buildSnackBar(
+          'Failed', 'Failed to delete the product. Try again', false, context);
     }
-  }
-
-  void _buildSnackBar(String content) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(content),
-      backgroundColor: Color(0xFF8986C4),
-      margin: EdgeInsets.all(20),
-      behavior: SnackBarBehavior.floating,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10)
-      ),
-    ));
   }
 }

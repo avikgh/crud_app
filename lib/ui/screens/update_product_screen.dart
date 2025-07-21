@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:crud_app/ui/widgets/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
@@ -116,26 +117,14 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
     final Response response = await post(uri,
         body: jsonEncode(productDetails),
         headers: {'content-type': 'application/json'});
-    if(response.statusCode == 200) {
-      _buildSnackBar('Product updated successfully.');
+    if (response.statusCode == 200) {
+      CustomSnackBar.buildSnackBar(
+          'Successful', 'Product updated successfully', true, context);
       Navigator.pop(context, true);
     } else {
-      _buildSnackBar('Failed to update product. Try again.');
+      CustomSnackBar.buildSnackBar(
+          'Failed', 'Failed to update product. Try again.', false, context);
     }
-  }
-
-  void _buildSnackBar(String content) {
-    ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(content),
-          backgroundColor: Color(0xFF8986C4),
-          margin: EdgeInsets.all(20),
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10)
-          ),
-        )
-    );
   }
 
   String? validate(String? value) {

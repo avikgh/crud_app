@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:crud_app/main.dart';
+import 'package:crud_app/ui/widgets/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
@@ -124,7 +125,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
           "TotalPrice": _totalPriceTEController.text.trim() ?? '',
         }),
         headers: {'content-type': 'application/json'});
-    if(response.statusCode == 200) {
+    if (response.statusCode == 200) {
       _nameTEController.clear();
       _codeTEController.clear();
       _unitPriceTEController.clear();
@@ -132,11 +133,13 @@ class _AddProductScreenState extends State<AddProductScreen> {
       _totalPriceTEController.clear();
       _imageTEController.clear();
       _circularProgressIndicator = true;
-      _buildSnackBar('Successful', 'Product added successfully.', true);
+      CustomSnackBar.buildSnackBar(
+          'Successful', 'Product added successfully.', true, context);
       setState(() {});
     } else {
       _circularProgressIndicator = true;
-      _buildSnackBar('Failed', 'Product added failed.', false);
+      CustomSnackBar.buildSnackBar(
+          'Failed', 'Product added failed.', false, context);
       setState(() {});
     }
   }
@@ -151,46 +154,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
   Widget _buildCircularProgressIndicator() {
     return CircularProgressIndicator(
       color: Color(0xFF8986C4),
-    );
-  }
-
-  void _buildSnackBar(String title, String content, bool type) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        elevation: 0,
-        content: Container(
-          height: 60,
-          width: double.maxFinite,
-          decoration: BoxDecoration(
-            color: type ? Colors.green : Colors.red,
-            borderRadius: BorderRadius.circular(10)
-          ),
-          child: Row(
-            children: [
-              SizedBox(width: 10),
-              Icon(type ? Icons.check_circle : Icons.close, size: 35, color: Colors.white,),
-              SizedBox(width: 10),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(title, style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500
-                  ),),
-                  Text(content, style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 15,
-                  ),),
-                ],
-              )
-            ],
-          ),
-        ),
-        backgroundColor: Colors.white,
-        behavior: SnackBarBehavior.floating,
-      )
     );
   }
 
